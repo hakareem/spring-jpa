@@ -1,8 +1,10 @@
 package com.harith.springboot.repository;
 
 import com.harith.springboot.domain.Anime;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +29,12 @@ public class AnimeRepository {
         anime.setId(ThreadLocalRandom.current().nextInt(4,100000));
         animes.add(anime);
         return anime;
+    }
+
+    public void delete(int id) {
+        animes.remove(animes.stream()
+                .filter(x -> x.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found")));
     }
 }
