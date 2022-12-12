@@ -1,6 +1,8 @@
 package com.harith.springboot.repository;
 
 import com.harith.springboot.domain.Anime;
+import com.harith.springboot.util.Utils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -11,7 +13,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Repository
+@RequiredArgsConstructor
 public class AnimeRepository {
+
+    private final Utils utils;
     private static List<Anime> animes;
 
     static  {
@@ -25,6 +30,10 @@ public class AnimeRepository {
         return animes;
     }
 
+    public Anime findById(int id){
+        return utils.findAnimeOrThrowNotFound(id, animes);
+    }
+
     public Anime save(Anime anime) {
         anime.setId(ThreadLocalRandom.current().nextInt(4,100000));
         animes.add(anime);
@@ -32,9 +41,11 @@ public class AnimeRepository {
     }
 
     public void delete(int id) {
-        animes.remove(animes.stream()
-                .filter(x -> x.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found")));
+        animes.remove(this.findById(id));
+    }
+
+    public void update(Anime anime) {
+        animes.remove(this.findById(anime.getId()));
+        animes.add(anime);
     }
 }
