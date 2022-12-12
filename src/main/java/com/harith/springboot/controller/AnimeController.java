@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -31,5 +33,16 @@ public class AnimeController {
     public ResponseEntity<List<Anime>> ListAll() {
         log.info("Formatted Date {}", dateUtil.formattedLocalDateTime(LocalDateTime.now()));
         return new ResponseEntity<>(animeRepository.listAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Anime> findById(@PathVariable int id) {
+       Anime anime = (Anime) animeRepository.listAll()
+               .stream()
+               .filter(x -> x.getId() == id)
+               .findFirst()
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime Not Found"));
+       
+       return ResponseEntity.ok(anime);
     }
 }
