@@ -1,51 +1,10 @@
 package com.harith.springboot.repository;
 
 import com.harith.springboot.domain.Anime;
-import com.harith.springboot.util.Utils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
-@Repository
-@RequiredArgsConstructor
-public class AnimeRepository {
-
-    private final Utils utils;
-    private static List<Anime> animes;
-
-    static  {
-       animes = new ArrayList<>(List.of(
-                new Anime(1,"First"),
-                new Anime(2, "Second"),
-                new Anime(3,"Third")
-        ));
-    }
-    public List<Anime> listAll() {
-        return animes;
-    }
-
-    public Anime findById(int id){
-        return utils.findAnimeOrThrowNotFound(id, animes);
-    }
-
-    public Anime save(Anime anime) {
-        anime.setId(ThreadLocalRandom.current().nextInt(4,100000));
-        animes.add(anime);
-        return anime;
-    }
-
-    public void delete(int id) {
-        animes.remove(this.findById(id));
-    }
-
-    public void update(Anime anime) {
-        animes.remove(this.findById(anime.getId()));
-        animes.add(anime);
-    }
+public interface AnimeRepository extends JpaRepository<Anime,Integer> {
+    List<Anime> findByName(String name);
 }
