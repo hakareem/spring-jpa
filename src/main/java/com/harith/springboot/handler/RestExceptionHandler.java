@@ -15,10 +15,10 @@ public class RestExceptionHandler {
     public ResponseEntity<ResourceNotFoundDetails> handleResourceNotFoundException(ResourceNotFoundException resource) {
     return new ResponseEntity<>(
             ResourceNotFoundDetails.builder()
-                    .timestamp(LocalDateTime.now())
-                    .status(HttpStatus.NOT_FOUND.value())
                     .title("Resource Not Found")
+                    .timestamp(LocalDateTime.now())
                     .detail(resource.getMessage())
+                    .status(HttpStatus.NOT_FOUND.value())
                     .build(), HttpStatus.NOT_FOUND
     );
 }

@@ -3,6 +3,7 @@ package com.harith.springboot.service;
 import com.harith.springboot.domain.Anime;
 import com.harith.springboot.repository.AnimeRepository;
 import com.harith.springboot.util.Utils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -24,8 +25,9 @@ public class AnimeService {
         return utils.findAnimeOrThrowNotFound(id, animeRepository);
     }
 
+    @Transactional
     public Anime save(Anime anime) {
-        return animeRepository.save(anime);
+      return animeRepository.save(anime);
     }
 
     public void delete(int id) {
