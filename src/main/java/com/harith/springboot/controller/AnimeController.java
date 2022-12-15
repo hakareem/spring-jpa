@@ -6,6 +6,8 @@ import com.harith.springboot.service.AnimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,8 @@ public class AnimeController {
     private final AnimeService animeService;
 
     @GetMapping()
-    public ResponseEntity<List<Anime>> ListAll() {
-        return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK);
+    public ResponseEntity<Page<Anime>> ListAll(Pageable pageable) {
+        return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
